@@ -1,5 +1,6 @@
 const gameContainer = document.querySelector(".game-container");
 const wordContainer = document.querySelector(".word-container");
+const guessesContainer = document.querySelector(".guesses-container");
 const lettersContainer = document.querySelector(".letters-buttons");
 
 // global variables
@@ -12,7 +13,7 @@ let guessedLetters = [];
 
 for (let i = 0; i < 26; i++) {
   const letter = document.createElement("button");
-  letter.innerHTML = String.fromCharCode(i + 65);
+  letter.innerHTML = String.fromCharCode(i + 97);
   letter.classList.add(
     "letter-button",
     "btn",
@@ -42,28 +43,21 @@ const createSpaces = (word) => {
     wordContainer.appendChild(letterSpace);
   }
 };
+
+const checkLetter = (letter) => {
+  const letters = wordContainer.querySelectorAll("span");
+  let correct = false;
+  for (let i = 0; i < letters.length; i++) {
+    if (letter === letters[i].innerHTML) {
+      letters[i].innerHTML = letter;
+      correct = true;
+    }
+  }
+  return correct;
+};
 window.onload = async () => {
   const word = await getWord();
+  const letters = word.split("");
   console.log(word);
   createSpaces(word);
-  alphabet.forEach((char) => {
-    char.addEventListener("click", () => {
-      if (guesses < MAX_GUESSES) {
-        if (word.includes(char.innerHTML)) {
-          const letterSpaces = document.querySelectorAll(".letter-space");
-          letterSpaces.forEach((letterSpace, index) => {
-            if (letterSpace.innerHTML === "-") {
-              letterSpace.innerHTML = char.innerHTML;
-              guessedLetters.push(char.innerHTML);
-            }
-          });
-        }
-        if (!guessedLetters.includes(char.innerHTML)) {
-          guessedLetters.push(char.innerHTML);
-          guesses++;
-          console.log(guessedLetters);
-        }
-      }
-    });
-  });
 };
